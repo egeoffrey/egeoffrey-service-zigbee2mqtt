@@ -1,0 +1,56 @@
+branch: master
+description: Integrate with Zigbee2mqtt by connecting to the same mqtt broker Zigbee2mqtt is publishing devices data
+dockerhub: egeoffrey/egeoffrey-service-zigbee2mqtt
+github: egeoffrey/egeoffrey-service-zigbee2mqtt
+icon: microchip
+manifest_schema: 2
+modules:
+- service/zigbee2mqtt:
+    description: Interact with sensors through a mqtt broker
+    module_configuration:
+    - description: The MQTT broker hostname to connect to
+      format: string
+      name: hostname
+      placeholder: egeoffrey-gateway
+      required: true
+    - description: The port of the MQTT broker
+      format: int
+      name: port
+      placeholder: 1883
+      required: true
+    - description: The username for authenticating against the mqtt broker
+      format: string
+      name: username
+      placeholder: username
+      required: false
+    - description: The password for authenticating against the mqtt broker
+      format: password
+      name: password
+      placeholder: password
+      required: false
+    - description: Zigbee2mqtt base topic
+      format: string
+      name: base_topic
+      placeholder: zigbee2mqtt
+      required: true
+    service_configuration:
+      push:
+      - description: The friendly name assiged to the device (if using the device id without the leading 0x)
+        format: string
+        name: device_id
+        placeholder: 00158d000346c0b3
+        required: true
+      - description: The key of the payload whose measure has to be extracted
+        format: string
+        name: key
+        placeholder: temperature
+        required: true
+      - description: Filter in only a subset of data based on conditions provided in the format key1=value1&key2=value2
+        format: string
+        name: filter
+        placeholder: action=rotate_right
+        required: false
+package: egeoffrey-service-zigbee2mqtt
+revision: 0
+tags: service mqtt zigbee
+version: 1.0

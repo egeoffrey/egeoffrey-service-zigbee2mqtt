@@ -1,0 +1,3 @@
+hostname: egeoffrey-gateway
+port: 1883
+base_topic: zigbee2mqtt
