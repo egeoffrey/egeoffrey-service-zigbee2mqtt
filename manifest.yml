@@ -1,5 +1,6 @@
 branch: master
-description: Integrate with Zigbee2mqtt by connecting to the same mqtt broker Zigbee2mqtt is publishing devices data
+description: Integrate with Zigbee2mqtt by connecting to the same mqtt broker Zigbee2mqtt
+  is publishing devices data
 dockerhub: egeoffrey/egeoffrey-service-zigbee2mqtt
 github: egeoffrey/egeoffrey-service-zigbee2mqtt
 icon: microchip
@@ -35,7 +36,8 @@ modules:
       required: true
     service_configuration:
       push:
-      - description: The friendly name assiged to the device (if using the device id without the leading 0x)
+      - description: The friendly name assiged to the device (if using the device
+          id without the leading 0x)
         format: string
         name: device_id
         placeholder: 00158d000346c0b3
@@ -45,12 +47,13 @@ modules:
         name: key
         placeholder: temperature
         required: true
-      - description: Filter in only a subset of data based on conditions provided in the format key1=value1&key2=value2
+      - description: Filter in only a subset of data based on conditions provided
+          in the format key1=value1&key2=value2
         format: string
         name: filter
         placeholder: action=rotate_right
         required: false
 package: egeoffrey-service-zigbee2mqtt
-revision: 0
+revision: 1
 tags: service mqtt zigbee
 version: 1.0
