@@ -73,7 +73,7 @@ class Zigbee2mqtt(Service):
                         for key, value in search.iteritems():
                             # check every key/value pair
                             if key not in data: found = False
-                            if str(value) != str(data[key]): found = False
+                            if key in data and str(value).lower() != str(data[key]).lower(): found = False
                         # not matching, skip to the next sensor
                         if not found: continue
                     value = data[configuration["key"]]
