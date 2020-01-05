@@ -8,6 +8,9 @@
 # optional: username, password
 ## COMMUNICATION:
 # INBOUND: 
+# - controller/hub OUT: 
+#   required: device_id, key, value
+#   optional: 
 # OUTBOUND:
 # - controller/hub IN: 
 #   required: device_id, key
@@ -27,6 +30,9 @@ class Zigbee2mqtt(Service):
     def on_init(self):
         # configuration
         self.config = {}
+        # track the topics subscribed
+        self.topics_to_subscribe = []
+        self.topics_subscribed = []
         # mqtt object
         self.client = mqtt.Client()
         self.mqtt_connected = False
@@ -40,16 +46,20 @@ class Zigbee2mqtt(Service):
         def on_connect(client, userdata, flags, rc):
             if rc == 0:
                 self.log_debug("Connected to the MQTT gateway ("+str(rc)+")")
+                # subscribe to previously queued topics
+                for topic in self.topics_to_subscribe:
+                    self.subscribe_topic(topic)
+                self.topics_to_subscribe = []
                 self.mqtt_connected = True
             
         # receive a callback when receiving a message
         def on_message(client, userdata, msg):
-            self.log_debug("published on "+str(msg.topic)+": "+str(msg.payload))
+            self.log_debug("received on "+str(msg.topic)+": "+str(msg.payload))
             # find the sensor matching the topic
             for sensor_id in self.sensors:
                 configuration = self.sensors[sensor_id]
                 # if the message is for this sensor
-                if msg.topic.endswith("/0x"+str(configuration["device_id"])):
+                if msg.topic.endswith("/"+str(configuration["device_id"])):
                     # parse the payload
                     try:
                         data = json.loads(msg.payload)
@@ -77,6 +87,8 @@ class Zigbee2mqtt(Service):
                         # not matching, skip to the next sensor
                         if not found: continue
                     value = data[configuration["key"]]
+                    # ignore empty values (when homeassistant is true, zigbee2mqtt will report an empty value just after a value
+                    if value == "": continue
                     self.log_debug("reporting "+sensor_id+" with value "+str(value))
                     # prepare the message
                     message = Message(self)
@@ -99,9 +111,6 @@ class Zigbee2mqtt(Service):
         # set callbacks
         self.client.on_connect = on_connect
         self.client.on_message = on_message
-        # subscribe to base_topic
-        self.log_debug("Subscribing to the MQTT topic "+self.config["base_topic"]+"/+")
-        self.client.subscribe(self.config["base_topic"]+"/+")
         # start loop (in the background)
         try: 
             self.client.loop_start()
@@ -115,7 +124,24 @@ class Zigbee2mqtt(Service):
         
     # What to do when receiving a request for this module
     def on_message(self, message):
-        pass
+        sensor_id = message.args
+        if message.command == "OUT":
+            if not self.mqtt_connected: return
+            if not self.is_valid_configuration(["device_id", "key", "value"], message.get_data()): return
+            topic = self.config["base_topic"]+"/"+message.get("device_id")+"/set"
+            data = {}
+            data[message.get("key")] = message.get("value")
+            data = json.dumps(data)
+            # send the message
+            self.log_info("sending message "+data+" to "+topic)
+            self.client.publish(topic, data)
+        
+    # subscribe to a mqtt topic
+    def subscribe_topic(self, device_id):
+        topic = self.config["base_topic"]+"/"+str(device_id)
+        self.log_debug("Subscribing to the MQTT topic "+topic)
+        self.topics_subscribed.append(topic)
+        self.client.subscribe(topic)
 
     # What to do when receiving a new/updated configuration for this module    
     def on_configuration(self,message):
@@ -133,3 +159,10 @@ class Zigbee2mqtt(Service):
             else: 
                 # TODO: certificate, client_id, ssl
                 sensor_id = self.register_sensor(message, ["device_id", "key"])
+                # subscribe to the topic if connected, otherwise queue the request
+                if sensor_id is not None and message.get("service")["mode"] != "actuator":
+                    configuration = self.sensors[sensor_id]
+                    if self.mqtt_connected: 
+                        self.subscribe_topic(configuration["device_id"])
+                    else: 
+                        self.topics_to_subscribe.append(configuration["device_id"])
