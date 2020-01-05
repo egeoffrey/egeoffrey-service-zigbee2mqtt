@@ -1,4 +1,4 @@
-branch: development
+branch: master
 description: Integrate with Zigbee2mqtt by connecting to the same mqtt broker Zigbee2mqtt
   is publishing devices data
 dockerhub: egeoffrey/egeoffrey-service-zigbee2mqtt
@@ -35,6 +35,17 @@ modules:
       placeholder: zigbee2mqtt
       required: true
     service_configuration:
+      actuator:
+      - description: The friendly name assiged to the device
+        format: string
+        name: device_id
+        placeholder: '0x00158d000346c0b3'
+        required: true
+      - description: Set the value to the following attribute
+        format: string
+        name: key
+        placeholder: state
+        required: true
       push:
       - description: The friendly name assiged to the device
         format: string
@@ -52,18 +63,7 @@ modules:
         name: filter
         placeholder: action=rotate_right
         required: false
-      actuator:
-      - description: The friendly name assiged to the device
-        format: string
-        name: device_id
-        placeholder: '0x00158d000346c0b3'
-        required: true
-      - description: Set the value to the following attribute
-        format: string
-        name: key
-        placeholder: state
-        required: true
 package: egeoffrey-service-zigbee2mqtt
-revision: 2
+revision: 3
 tags: service mqtt zigbee
 version: 1.0

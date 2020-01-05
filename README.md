@@ -30,9 +30,12 @@ To configure each module included in this package, once started, click on the *'
     - *base_topic**: zigbee2mqtt base topic (e.g. zigbee2mqtt)
   - Service configuration:
     - Mode 'push':
-      - *device_id**: the friendly name assiged to the device (if using the device id without the leading 0x) (e.g. 00158d000346c0b3)
+      - *device_id**: the friendly name assiged to the device (e.g. 0x00158d000346c0b3)
       - *key**: the key of the payload whose measure has to be extracted (e.g. temperature)
       - *filter*: filter in only a subset of data based on conditions provided in the format key1=value1&key2=value2 (e.g. action=rotate_right)
+    - Mode 'actuator':
+      - *device_id**: the friendly name assiged to the device (e.g. 0x00158d000346c0b3)
+      - *key**: set the value to the following attribute (e.g. state)
 
 ## Contribute
 
@@ -67,4 +70,4 @@ service mqtt zigbee
 
 ## Version
 
-The version of this egeoffrey-service-zigbee2mqtt is 1.0-2 on the master branch.
+The version of this egeoffrey-service-zigbee2mqtt is 1.0-3 on the master branch.
