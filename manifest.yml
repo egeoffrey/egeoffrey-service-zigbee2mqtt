@@ -64,6 +64,6 @@ modules:
         placeholder: action=rotate_right
         required: false
 package: egeoffrey-service-zigbee2mqtt
-revision: 3
+revision: 4
 tags: service mqtt zigbee
 version: 1.0

@@ -51,7 +51,7 @@ If you are a user willing to contribute to somebody's else package, submit your 
 
 Building is required only if you are the author of the package. To build a Docker image and automatically push it to [Docker Hub](https://hub.docker.com/r/egeoffrey/egeoffrey-service-zigbee2mqtt), run the following command from within this package's directory:
 ```
-egeoffrey-cli build egeoffrey-service-zigbee2mqtt <amd64|arm>
+egeoffrey-cli build egeoffrey-service-zigbee2mqtt
 ```
 
 ## Uninstall
@@ -70,4 +70,4 @@ service mqtt zigbee
 
 ## Version
 
-The version of this egeoffrey-service-zigbee2mqtt is 1.0-3 on the master branch.
+The version of this egeoffrey-service-zigbee2mqtt is 1.0-4 on the master branch.
