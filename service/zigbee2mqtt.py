@@ -127,13 +127,17 @@ class Zigbee2mqtt(Service):
         sensor_id = message.args
         if message.command == "OUT":
             if not self.mqtt_connected: return
-            if not self.is_valid_configuration(["device_id", "key", "value"], message.get_data()): return
+            if not self.is_valid_configuration(["device_id", "value"], message.get_data()): return
+            if not message.has("key") and not message.has("template"): return
             topic = self.config["base_topic"]+"/"+message.get("device_id")+"/set"
-            data = {}
-            data[message.get("key")] = message.get("value")
-            data = json.dumps(data)
+            if message.has("key"):
+                data = {}
+                data[message.get("key")] = message.get("value")
+                data = json.dumps(data)
+            elif message.has("template"):
+                data = message.get("template").replace("%value%", str(message.get("value")))
             # send the message
-            self.log_info("sending message "+data+" to "+topic)
+            self.log_info("sending message "+str(data)+" to "+topic)
             self.client.publish(topic, data)
         
     # subscribe to a mqtt topic

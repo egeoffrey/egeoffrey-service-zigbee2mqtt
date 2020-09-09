@@ -35,7 +35,8 @@ To configure each module included in this package, once started, click on the *'
       - *filter*: filter in only a subset of data based on conditions provided in the format key1=value1&key2=value2 (e.g. action=rotate_right)
     - Mode 'actuator':
       - *device_id**: the friendly name assiged to the device (e.g. 0x00158d000346c0b3)
-      - *key**: set the value to the following attribute (e.g. state)
+      - *key*: send a JSON payload with the value set into the following attribute (e.g. state)
+      - *template*: send a custom payload with the placeholder %value% replaced by the actual value (e.g. {"warning": {"duration": 10, "mode": "%value%", "strobe": true}})
 
 ## Contribute
 
@@ -70,4 +71,4 @@ service mqtt zigbee
 
 ## Version
 
-The version of this egeoffrey-service-zigbee2mqtt is 1.0-4 on the master branch.
+The version of this egeoffrey-service-zigbee2mqtt is 1.0-5 on the master branch.

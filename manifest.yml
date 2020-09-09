@@ -41,11 +41,17 @@ modules:
         name: device_id
         placeholder: '0x00158d000346c0b3'
         required: true
-      - description: Set the value to the following attribute
+      - description: Send a JSON payload with the value set into the following attribute
         format: string
         name: key
         placeholder: state
-        required: true
+        required: false
+      - description: Send a custom payload with the placeholder %value% replaced by
+          the actual value
+        format: string
+        name: template
+        placeholder: '{"warning": {"duration": 10, "mode": "%value%", "strobe": true}}'
+        required: false
       push:
       - description: The friendly name assiged to the device
         format: string
@@ -64,6 +70,6 @@ modules:
         placeholder: action=rotate_right
         required: false
 package: egeoffrey-service-zigbee2mqtt
-revision: 4
+revision: 5
 tags: service mqtt zigbee
 version: 1.0
