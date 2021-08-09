@@ -71,4 +71,4 @@ service mqtt zigbee
 
 ## Version
 
-The version of this egeoffrey-service-zigbee2mqtt is 1.0-5 on the master branch.
+The version of this egeoffrey-service-zigbee2mqtt is 1.1-1 on the master branch.
